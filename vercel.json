@@ -6,6 +6,16 @@
   },
   "routes": [
     {
+      "src": "/(config|database)/.*",
+      "status": 403,
+      "dest": "/"
+    },
+    {
+      "src": "/.*\\.(sql|env|log|sh|md|yml|yaml)$",
+      "status": 403,
+      "dest": "/"
+    },
+    {
       "src": "/(assets/.*)",
       "dest": "/$1"
     },
