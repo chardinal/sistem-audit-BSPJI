@@ -1,0 +1,22 @@
+{
+    "name": "bspji/ams",
+    "description": "Audit Management System BSPJI Surabaya",
+    "type": "project",
+    "require": {
+        "php": ">=8.2",
+        "google/apiclient": "^2.15"
+    },
+    "autoload": {
+        "psr-4": {
+            "Services\\": "services/",
+            "Templates\\": "templates/"
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

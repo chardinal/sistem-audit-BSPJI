@@ -1,0 +1,30 @@
+# ============================================================
+# .htaccess — Sistem Audit BSPJI
+# ============================================================
+
+Options -Indexes
+RewriteEngine On
+
+# Redirect ke HTTPS (nonaktifkan jika tidak pakai SSL)
+# RewriteCond %{HTTPS} off
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Cegah akses langsung ke file sensitif
+<FilesMatch "\.(sql|env|log|sh|md|yml|yaml)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Cegah akses ke folder config dan database
+RedirectMatch 403 ^/config/.*$
+RedirectMatch 403 ^/database/.*$
+
+# Proteksi file konfigurasi
+<Files "docker-compose.yml">
+    Order allow,deny
+    Deny from all
+</Files>
+<Files "Dockerfile">
+    Order allow,deny
+    Deny from all
+</Files>

@@ -1,0 +1,94 @@
+# ============================================================
+# Sistem Audit BSPJI — Docker Compose
+# Services:
+#   app        → PHP 8.2 + Apache  (port 8080)
+#   db         → MySQL 8.0          (port 3306)
+#   phpmyadmin → phpMyAdmin          (port 8081)
+# ============================================================
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ams_app
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      # Hot-reload: perubahan file langsung terlihat tanpa rebuild
+      - .:/var/www/html
+      # Volume terpisah untuk vendor/ agar tidak tertimpa bind mount
+      - ams_vendor:/var/www/html/vendor
+    environment:
+      - DB_HOST=db
+      - DB_NAME=ams_db
+      - DB_USER=ams_user
+      - DB_PASS=ams_password123
+    # Install composer (jika vendor kosong), seed data, lalu start Apache
+    command: >
+      sh -c "cd /var/www/html &&
+             composer install --no-dev --optimize-autoloader --no-interaction &&
+             php /var/www/html/setup.php > /tmp/ams_setup.log 2>&1 &&
+             echo '[AMS] Setup selesai. Lihat log: /tmp/ams_setup.log' &&
+             apache2-foreground"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - ams_network
+
+  # ── 2. MySQL 8.0 ─────────────────────────────────────────
+  db:
+    image: mysql:8.0
+    container_name: ams_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password123
+      MYSQL_DATABASE: ams_db
+      MYSQL_USER: ams_user
+      MYSQL_PASSWORD: ams_password123
+    ports:
+      - "3306:3306"
+    volumes:
+      # Data MySQL persisten (tidak hilang saat container restart)
+      - ams_db_data:/var/lib/mysql
+      # Auto-import schema saat pertama kali dibuat
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot_password123"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - ams_network
+
+  # ── 3. phpMyAdmin ─────────────────────────────────────────
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: ams_phpmyadmin
+    restart: unless-stopped
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: root_password123
+      UPLOAD_LIMIT: 100M
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - ams_network
+
+volumes:
+  ams_db_data:
+    driver: local
+  # Volume terpisah agar vendor/ tidak ditimpa bind mount source code
+  ams_vendor:
+    driver: local
+
+networks:
+  ams_network:
+    driver: bridge
