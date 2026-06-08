@@ -105,7 +105,7 @@ include '../_header.php';
 
 <?php if ($flash): ?>
 <div class="alert alert-<?= $flash['type'] === 'success' ? 'success' : 'error' ?>" style="margin-bottom:16px">
-  <?= $flash['type'] === 'success' ? '✅' : '❌' ?> <?= e($flash['msg']) ?>
+  <?= $flash['type'] === 'success' ? '✓' : '✗' ?> <?= e($flash['msg']) ?>
 </div>
 <?php endif; ?>
 
@@ -190,7 +190,7 @@ include '../_header.php';
               <!-- Hapus -->
               <button type="button" class="aksi-btn danger"
                       onclick="bukaModalHapus('<?= e($k['id']) ?>','<?= e(addslashes($k['perusahaan'])) ?>','<?= e(addslashes($k['jenis'])) ?>')">
-                🗑 Hapus
+                Hapus
               </button>
             </div>
           </td>
@@ -205,7 +205,7 @@ include '../_header.php';
 <!-- ── Modal Konfirmasi Hapus ──────────────────────────── -->
 <div class="modal-overlay" id="modal-hapus">
   <div class="modal-box">
-    <div class="modal-icon">🗑️</div>
+    <div class="modal-icon" style="color: #ef4444">&#9888;</div>
     <div class="modal-title">Hapus Kunjungan?</div>
     <div class="modal-body" id="modal-hapus-body">
       Data kunjungan ini akan dihapus <strong>permanen</strong> beserta seluruh tim dan notifikasinya.<br>

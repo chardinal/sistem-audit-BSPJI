@@ -79,7 +79,9 @@ function getNotifikasi(PDO $db, string $tipe, string $penerima_id, int $limit = 
     $s = $db->prepare("
         SELECT n.id, n.tipe_penerima, n.penerima_id, n.pesan, n.kunjungan_id, n.sudah_dibaca,
                n.dibuat_pada,
-               pr.nama AS perusahaan_nama
+               pr.nama AS perusahaan_nama,
+               k.status AS kunjungan_status,
+               (SELECT COUNT(*) FROM penugasan_tim WHERE kunjungan_id = n.kunjungan_id AND pegawai_id = n.penerima_id) AS is_assigned
         FROM notifikasi n
         LEFT JOIN kunjungan k  ON k.id  = n.kunjungan_id
         LEFT JOIN perusahaan pr ON pr.id = k.perusahaan_id

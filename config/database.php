@@ -76,7 +76,7 @@ set_exception_handler(function (Throwable $e): void {
     </head>
     <body>
         <div class="err">
-            <h1>⚠️ Terjadi Kesalahan</h1>
+            <h1>Terjadi Kesalahan</h1>
             <p>Sistem mengalami masalah saat memproses permintaan ini.<br>
                Tim teknis telah dicatat. Silakan coba beberapa saat lagi.</p>
             <?php if (defined('APP_VERSION') && APP_VERSION !== 'prod'): ?>

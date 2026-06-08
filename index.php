@@ -50,7 +50,7 @@ body{font-family:'Inter',Arial,sans-serif;background:#0f172a;min-height:100vh;di
     </a>
     <a class="portal-card" href="pegawai/login.php">
       <div class="portal-name">Portal Pegawai</div>
-      <div class="portal-desc">Validasi penugasan dan lihat jadwal pribadi</div>
+      <div class="portal-desc">Lihat jadwal penugasan dan kelola profil pribadi</div>
     </a>
   </div>
 

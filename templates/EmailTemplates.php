@@ -20,7 +20,7 @@ class EmailTemplates
         string $tanggalSelesai,
         array  $anggotaTim = []
     ): array {
-        $subject = "[AMS] Penugasan Audit Baru — {$namaPerusahaan}";
+        $subject = "[AMS] Penugasan Audit Baru - {$namaPerusahaan}";
         $timHtml = self::buildTimHtml($anggotaTim);
 
         $body = self::wrapper("
@@ -79,7 +79,7 @@ class EmailTemplates
         string $tanggalMulai,
         string $tanggalSelesai
     ): array {
-        $subject = "[AMS] Pembatalan Penugasan — {$namaPerusahaan}";
+        $subject = "[AMS] Pembatalan Penugasan - {$namaPerusahaan}";
 
         $body = self::wrapper("
             <div class='header-badge' style='background:#b91c1c'>PEMBATALAN PENUGASAN</div>
@@ -128,7 +128,7 @@ class EmailTemplates
         string $tanggalMulai,
         string $tanggalSelesai
     ): array {
-        $subject = "[AMS] ⚠️ Kunjungan Dibatalkan — {$namaPerusahaan}";
+        $subject = "[AMS] ⚠️ Kunjungan Dibatalkan - {$namaPerusahaan}";
         $tanggal = date('d M Y', strtotime($tanggalMulai)) . ' – ' . date('d M Y', strtotime($tanggalSelesai));
 
         $body = self::wrapper("
@@ -191,8 +191,8 @@ class EmailTemplates
     ): array {
         // Subject lebih informatif jika ada perubahan jadwal
         $subject = empty($perubahanDetail)
-            ? "[AMS] Perubahan Tim Audit — {$namaPerusahaan}"
-            : "[AMS] Perubahan Jadwal & Tim — {$namaPerusahaan}";
+            ? "[AMS] Perubahan Tim Audit - {$namaPerusahaan}"
+            : "[AMS] Perubahan Jadwal & Tim - {$namaPerusahaan}";
 
         $timHtml = self::buildTimHtml($anggotaBaru);
 

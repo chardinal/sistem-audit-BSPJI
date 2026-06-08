@@ -145,14 +145,17 @@ class NotificationService
         $kunjungan      = $this->getKunjungan($kunjunganId);
         $anggotaDihapus = $this->getPegawaiById($pegawaiDihapusId);
         $anggotaBaru    = $this->getPegawaiById($pegawaiBaruId);
-        $timBaru        = $this->getTim($kunjunganId);
 
         if (!$kunjungan || !$anggotaDihapus || !$anggotaBaru) return;
 
         // 1. Hapus calendar event anggota lama
         $calEventId = $this->getCalendarEventId($kunjunganId, $pegawaiDihapusId);
         if ($calEventId) {
-            $this->calendar->deleteEvent($calEventId);
+            try {
+                $this->calendar->deleteEvent($calEventId);
+            } catch (\Exception $e) {
+                $this->errors[] = "Hapus Calendar '{$anggotaDihapus['nama']}': " . $e->getMessage();
+            }
         }
 
         // 2. Email pembatalan ke anggota lama
@@ -170,9 +173,13 @@ class NotificationService
             $this->errors[] = "Email pembatalan: " . $e->getMessage();
         }
 
-        // 3. Calendar + email penugasan ke anggota baru
+        // 3. Buat Calendar event ke anggota baru
         try {
             $roleAnggotaBaru = $this->getRoleDiKunjungan($kunjunganId, $pegawaiBaruId);
+            
+            // Dapatkan tim saat ini untuk pembuatan calendar event
+            $timSaatIni = $this->getTim($kunjunganId);
+            
             $eventId = $this->calendar->createEvent(
                 pegawaiEmail:   $anggotaBaru['email'],
                 namaPerusahaan: $kunjungan['perusahaan'],
@@ -180,28 +187,18 @@ class NotificationService
                 rolePegawai:    $roleAnggotaBaru,
                 tanggalMulai:   $kunjungan['tanggal_mulai'],
                 tanggalSelesai: $kunjungan['tanggal_selesai'],
-                anggotaTim:     $timBaru
+                anggotaTim:     $timSaatIni
             );
             $this->simpanCalendarEventId($kunjunganId, $pegawaiBaruId, $eventId);
-
-            ['subject' => $sub, 'body' => $bod] = EmailTemplates::penugasanBaru(
-                namaPegawai:      $anggotaBaru['nama'],
-                rolePegawai:      $roleAnggotaBaru,
-                namaPerusahaan:   $kunjungan['perusahaan'],
-                alamatPerusahaan: $kunjungan['alamat'],
-                jenisAudit:       $kunjungan['jenis_audit'],
-                tanggalMulai:     $kunjungan['tanggal_mulai'],
-                tanggalSelesai:   $kunjungan['tanggal_selesai'],
-                anggotaTim:       $timBaru
-            );
-            $this->gmail->send($anggotaBaru['email'], $sub, $bod);
         } catch (\Exception $e) {
-            $this->errors[] = "Email/Calendar anggota baru: " . $e->getMessage();
+            $this->errors[] = "Calendar anggota baru: " . $e->getMessage();
         }
 
-        // 4. Email perubahan tim ke anggota yang masih tersisa
+        // Ambil tim terbaru setelah event ID disimpan
+        $timBaru = $this->getTim($kunjunganId);
+
+        // 4. Email perubahan jadwal ke seluruh anggota tim terbaru (termasuk pengganti baru)
         foreach ($timBaru as $anggota) {
-            if ($anggota['pegawai_id'] === $pegawaiBaruId) continue; // sudah dapat email penugasan
             if (empty($anggota['email'])) continue;
             try {
                 ['subject' => $sub, 'body' => $bod] = EmailTemplates::perubahanTim(

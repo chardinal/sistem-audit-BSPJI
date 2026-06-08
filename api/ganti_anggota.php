@@ -86,6 +86,10 @@ if ($action === 'otomatis') {
     $db->prepare("UPDATE penugasan_tim SET pegawai_id=?, ditugaskan_pada=NOW() WHERE id=?")
        ->execute([$pengganti['id'], $penugasanId]);
 
+    // Kembalikan status kunjungan ke 'Aktif' jika sebelumnya 'Butuh Intervensi'
+    $db->prepare("UPDATE kunjungan SET status='Aktif' WHERE id=? AND status='Butuh Intervensi'")
+       ->execute([$kunjunganId]);
+
     // Notifikasi
     _kirimNotifGanti($db, $kunjunganId, $oldPegawaiId, $pengganti['id']);
 
@@ -123,6 +127,10 @@ if ($action === 'manual') {
     // Ganti penugasan
     $db->prepare("UPDATE penugasan_tim SET pegawai_id=?, ditugaskan_pada=NOW() WHERE id=?")
        ->execute([$pegawaiBaru, $penugasanId]);
+
+    // Kembalikan status kunjungan ke 'Aktif' jika sebelumnya 'Butuh Intervensi'
+    $db->prepare("UPDATE kunjungan SET status='Aktif' WHERE id=? AND status='Butuh Intervensi'")
+       ->execute([$kunjunganId]);
 
     // Notifikasi
     _kirimNotifGanti($db, $kunjunganId, $oldPegawaiId, $pegawaiBaru);

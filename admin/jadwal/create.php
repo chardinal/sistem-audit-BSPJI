@@ -99,7 +99,7 @@ include '../_header.php';
 </div>
 
 <?php foreach ($errors as $err): ?>
-<div class="alert alert-error">⚠️ <?= e($err) ?></div>
+<div class="alert alert-error"><?= e($err) ?></div>
 <?php endforeach; ?>
 
 <form method="POST" action="" id="form-kunjungan">
@@ -110,7 +110,7 @@ include '../_header.php';
 <!-- ── Kolom Kiri: Form Detail ────────────────────────────── -->
 <div>
   <div class="card">
-    <div class="card-header"><h2>📋 Detail Kunjungan</h2></div>
+    <div class="card-header"><h2>Detail Kunjungan</h2></div>
     <div class="card-body">
 
       <!-- Perusahaan Live Search -->
@@ -180,7 +180,7 @@ include '../_header.php';
       </div>
 
       <button type="button" id="btn-preview" class="btn btn-navy" style="width:100%;justify-content:center">
-        🔍 Preview Tim Otomatis
+        Preview Tim Otomatis
       </button>
     </div>
   </div>
@@ -193,12 +193,11 @@ include '../_header.php';
 
   <div class="card">
     <div class="card-header" style="justify-content:space-between">
-      <h2>👥 Formasi Tim</h2>
-      <button type="button" id="btn-acak-ulang" class="btn btn-secondary btn-sm" style="display:none">🔀 Acak Ulang</button>
+      <h2>Formasi Tim</h2>
+      <button type="button" id="btn-acak-ulang" class="btn btn-secondary btn-sm" style="display:none">Acak Ulang</button>
     </div>
     <div class="card-body" style="padding:0">
       <div id="preview-tim-box" style="padding:32px 20px;color:#9CA3AF;text-align:center">
-        <div style="font-size:32px;margin-bottom:8px">👥</div>
         <p>Lengkapi form di sebelah kiri<br>lalu klik <strong>Preview Tim Otomatis</strong></p>
       </div>
     </div>
@@ -207,7 +206,7 @@ include '../_header.php';
   <div class="card mt-3">
     <div class="card-body">
       <button type="submit" id="btn-simpan" class="btn btn-success" style="width:100%;justify-content:center;padding:12px;font-size:15px" disabled>
-        💾 Simpan &amp; Aktifkan Jadwal
+        Simpan &amp; Aktifkan Jadwal
       </button>
       <div id="simpan-hint" style="font-size:11px;color:#9CA3AF;text-align:center;margin-top:6px">Lengkapi semua slot formasi terlebih dahulu</div>
       <a href="index.php" class="btn btn-secondary mt-3" style="width:100%;justify-content:center">Batal</a>
@@ -218,16 +217,9 @@ include '../_header.php';
 </div><!-- end grid -->
 </form>
 
-<!-- ── Dropdown pilih manual (shared, dipindah via JS) ──── -->
-<div id="manual-dropdown-overlay" style="display:none;position:fixed;inset:0;z-index:299" onclick="tutupManualDropdown()"></div>
-<div id="manual-dropdown" style="display:none;position:fixed;z-index:300;background:#fff;border:1px solid #E5E7EB;border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,0.15);width:300px;max-height:360px;overflow:hidden;flex-direction:column">
-  <div style="padding:10px 12px;border-bottom:1px solid #F3F4F6">
-    <input id="manual-search" type="text" placeholder="Cari nama pegawai..." style="width:100%;padding:7px 10px;border:1.5px solid #E5E7EB;border-radius:6px;font-size:13px;outline:none">
-  </div>
-  <div id="manual-list" style="overflow-y:auto;max-height:280px"></div>
-</div>
+<!-- Dropdown pilih manual removed -->
 
-<style>
+<<style>
 /* ── Formasi Slot Cards ──────────────────────────────────── */
 .formasi-slot {
   padding: 14px 16px;
@@ -249,13 +241,13 @@ include '../_header.php';
 .anggota-card {
   display: flex; flex-direction: column; gap: 8px;
   background: #F8FAFC; border: 1.5px solid #E2E8F0; border-radius: 8px;
-  padding: 10px 12px; margin-bottom: 8px;
+  padding: 12px; margin-bottom: 8px;
   transition: border-color .15s;
 }
 .anggota-card.valid { border-color: #10B981; background: #F0FDF4; }
 .anggota-card.empty-slot {
-  border: 2px dashed #FCA5A5; background: #FFF5F5;
-  color: #EF4444; font-size: 13px; padding: 12px;
+  border: 2.5px dashed #FCA5A5; background: #FFF5F5;
+  color: #EF4444; font-size: 13px; padding: 16px;
   border-radius: 8px; margin-bottom: 8px; text-align: center;
 }
 .anggota-top {
@@ -269,31 +261,16 @@ include '../_header.php';
 .anggota-info { flex: 1; min-width: 0; }
 .anggota-nama { font-size: 13px; font-weight: 600; color: #1E293B; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .anggota-beban { font-size: 11px; color: #64748B; margin-top: 1px; }
-.anggota-actions { display: flex; gap: 6px; flex-wrap: wrap; }
-.btn-ganti { background: #EFF6FF; color: #2563EB; border: 1px solid #BFDBFE; padding: 5px 11px; border-radius: 5px; font-size: 11px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: all .15s; }
+.anggota-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn-ganti { background: #EFF6FF; color: #2563EB; border: 1px solid #BFDBFE; padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: all .15s; }
 .btn-ganti:hover { background: #DBEAFE; }
-.btn-manual { background: #F5F3FF; color: #6D28D9; border: 1px solid #DDD6FE; padding: 5px 11px; border-radius: 5px; font-size: 11px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: all .15s; }
-.btn-manual:hover { background: #EDE9FE; }
-.btn-hapus { background: #FEF2F2; color: #DC2626; border: 1px solid #FECACA; padding: 5px 11px; border-radius: 5px; font-size: 11px; font-weight: 600; cursor: pointer; transition: all .15s; }
+.btn-hapus { background: #FEF2F2; color: #DC2626; border: 1px solid #FECACA; padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all .15s; }
 .btn-hapus:hover { background: #FEE2E2; }
-.btn-pilih-manual { background: #F1F5F9; color: #475569; border: 1.5px dashed #CBD5E1; padding: 7px 14px; border-radius: 7px; font-size: 12px; font-weight: 600; cursor: pointer; width: 100%; text-align: center; transition: all .15s; }
-.btn-pilih-manual:hover { background: #E2E8F0; border-color: #94A3B8; }
 
 /* Status bar */
 .status-ok   { background: #D1FAE5; color: #065F46; border: 1px solid #6EE7B7; }
 .status-err  { background: #FEE2E2; color: #991B1B; border: 1px solid #FCA5A5; }
 .status-load { background: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE; }
-
-/* Manual dropdown list item */
-.manual-item {
-  padding: 10px 14px; cursor: pointer; border-bottom: 1px solid #F8FAFC;
-  transition: background .1s;
-}
-.manual-item:hover { background: #F0F9FF; }
-.manual-item:last-child { border-bottom: none; }
-.manual-item-nama { font-size: 13px; font-weight: 600; color: #1E293B; }
-.manual-item-beban { font-size: 11px; color: #64748B; }
-.manual-item-none { padding: 20px; text-align: center; color: #94A3B8; font-size: 13px; }
 </style>
 
 <script>
@@ -401,16 +378,16 @@ document.getElementById('btn-acak-ulang').addEventListener('click', loadPreview)
 function loadPreview() {
   const f = getFormValues();
   if (!f.perusahaanId || !f.jenisId || !f.tglMulai || !f.tglSelesai) {
-    tampilStatusBar('err', '⚠️ Lengkapi semua field dan pilih perusahaan dari daftar terlebih dahulu.');
+    tampilStatusBar('err', 'Lengkapi semua field dan pilih perusahaan dari daftar terlebih dahulu.');
     return;
   }
   if (f.tglSelesai < f.tglMulai) {
-    tampilStatusBar('err', '⚠️ Tanggal selesai tidak boleh mendahului tanggal mulai.');
+    tampilStatusBar('err', 'Tanggal selesai tidak boleh mendahului tanggal mulai.');
     return;
   }
 
-  tampilStatusBar('load', '⏳ Memuat formasi tim...');
-  document.getElementById('preview-tim-box').innerHTML = '<div style="padding:32px;text-align:center;color:#64748B"><div style="font-size:28px;margin-bottom:8px">⏳</div><p>Membangun formasi tim...</p></div>';
+  tampilStatusBar('load', 'Memuat formasi tim...');
+  document.getElementById('preview-tim-box').innerHTML = '<div style="padding:32px;text-align:center;color:#64748B"><p>Membangun formasi tim...</p></div>';
   document.getElementById('btn-simpan').disabled = true;
 
   const url = BASE_URL+'/api/preview_tim.php'
@@ -421,8 +398,8 @@ function loadPreview() {
 
   fetch(url).then(r=>r.json()).then(data => {
     if (!data || data.error) {
-      document.getElementById('preview-tim-box').innerHTML = '<div style="padding:24px;text-align:center;color:#EF4444">⚠️ '+(data.error||'Gagal memuat preview.')+'</div>';
-      tampilStatusBar('err', '⚠️ '+(data.error||'Gagal memuat preview.'));
+      document.getElementById('preview-tim-box').innerHTML = '<div style="padding:24px;text-align:center;color:#EF4444">' + esc(data.error || 'Gagal memuat preview.') + '</div>';
+      tampilStatusBar('err', (data.error || 'Gagal memuat preview.'));
       return;
     }
     // Bangun formasiState dari response
@@ -439,8 +416,8 @@ function loadPreview() {
     renderFormasiPanel();
     document.getElementById('btn-acak-ulang').style.display = '';
   }).catch(() => {
-    document.getElementById('preview-tim-box').innerHTML = '<div style="padding:24px;color:#EF4444;text-align:center">❌ Gagal terhubung ke server.</div>';
-    tampilStatusBar('err', '❌ Gagal terhubung ke server.');
+    document.getElementById('preview-tim-box').innerHTML = '<div style="padding:24px;color:#EF4444;text-align:center">Gagal terhubung ke server.</div>';
+    tampilStatusBar('err', 'Gagal terhubung ke server.');
   });
 }
 
@@ -472,15 +449,14 @@ function renderFormasiPanel() {
         html += '    </div>';
         html += '  </div>';
         html += '  <div class="anggota-actions">';
-        html += '    <button type="button" class="btn-ganti" data-role="'+esc(slot.role_id)+'" data-idx="'+idx+'">🔀 Ganti Otomatis</button>';
-        html += '    <button type="button" class="btn-manual" data-role="'+esc(slot.role_id)+'" data-idx="'+idx+'">✏️ Pilih Manual</button>';
-        html += '    <button type="button" class="btn-hapus" data-role="'+esc(slot.role_id)+'" data-idx="'+idx+'">🗑️ Hapus</button>';
+        html += '    <button type="button" class="btn-ganti" data-role="'+esc(slot.role_id)+'" data-idx="'+idx+'">Ganti Otomatis</button>';
+        html += '    <button type="button" class="btn-hapus" data-role="'+esc(slot.role_id)+'" data-idx="'+idx+'">Hapus</button>';
         html += '  </div>';
         html += '</div>';
       } else {
         html += '<div class="anggota-card empty-slot">';
-        html += '  <div style="color:#EF4444;font-size:13px;text-align:center;margin-bottom:6px">⬜ Slot kosong</div>';
-        html += '  <button type="button" class="btn-pilih-manual" data-role="'+esc(slot.role_id)+'" data-idx="'+idx+'">+ Pilih Manual untuk Slot Ini</button>';
+        html += '  <div style="color:#EF4444;font-size:13px;text-align:center;margin-bottom:6px">Slot kosong</div>';
+        html += '  <button type="button" class="btn-ganti" style="width:100%;text-align:center" data-role="'+esc(slot.role_id)+'" data-idx="'+idx+'">Pilih Otomatis</button>';
         html += '</div>';
       }
     });
@@ -505,13 +481,8 @@ function handleFormasiClick(e) {
 
   if (btn.classList.contains('btn-ganti')) {
     gantiAnggotaOtomatis(roleId, idx);
-  } else if (btn.classList.contains('btn-manual')) {
-    bukaManualDropdown(roleId, idx, btn);
   } else if (btn.classList.contains('btn-hapus')) {
     hapusAnggota(roleId, idx);
-  } else if (btn.classList.contains('btn-pilih-manual')) {
-    // Tombol "+ Pilih Manual" di slot kosong
-    bukaManualDropdown(roleId, idx, btn);
   }
 }
 
@@ -557,120 +528,6 @@ function hapusAnggota(roleId, slotIdx) {
 }
 
 // ═══════════════════════════════════════════════════════════
-// Pilih Manual — Dropdown
-// ═══════════════════════════════════════════════════════════
-function bukaManualDropdown(roleId, slotIdx, btn) {
-  tutupManualDropdown();
-  currentManualTarget = { roleId, slotIdx };
-
-  const f = getFormValues();
-  const excludeIds = getAllSelectedIds(roleId, slotIdx); // exclude semua kecuali slot saat ini
-  const dropdown = document.getElementById('manual-dropdown');
-  const overlay  = document.getElementById('manual-dropdown-overlay');
-  const list     = document.getElementById('manual-list');
-  const search   = document.getElementById('manual-search');
-
-  // Posisi dropdown di bawah tombol
-  const rect = btn.getBoundingClientRect();
-  dropdown.style.top  = (rect.bottom + window.scrollY + 4) + 'px';
-  dropdown.style.left = Math.min(rect.left, window.innerWidth - 320) + 'px';
-
-  list.innerHTML = '<div class="manual-item-none">⏳ Memuat...</div>';
-  dropdown.style.display = 'flex';
-  overlay.style.display  = 'block';
-  search.value = '';
-  search.focus();
-
-  const url = BASE_URL+'/api/pegawai_by_role.php'
-    +'?role_id='+encodeURIComponent(roleId)
-    +'&tgl_mulai='+encodeURIComponent(f.tglMulai)
-    +'&tgl_selesai='+encodeURIComponent(f.tglSelesai)
-    +'&perusahaan_id='+encodeURIComponent(f.perusahaanId)
-    +'&jenis_id='+encodeURIComponent(f.jenisId)
-    +'&exclude_ids='+encodeURIComponent(JSON.stringify(excludeIds));
-
-  let allKandidat = [];
-
-  // Hapus listener search lama sebelum pasang baru
-  const searchNew = search.cloneNode(true);
-  search.parentNode.replaceChild(searchNew, search);
-  searchNew.value = '';
-  searchNew.focus();
-
-  fetch(url).then(r=>r.json()).then(data => {
-    allKandidat = Array.isArray(data) ? data : [];
-    renderManualList(allKandidat, roleId);
-  }).catch(() => { list.innerHTML = '<div class="manual-item-none">❌ Gagal memuat.</div>'; });
-
-  searchNew.addEventListener('input', function() {
-    const q = this.value.toLowerCase();
-    renderManualList(allKandidat.filter(k=>k.nama.toLowerCase().includes(q)), roleId);
-  });
-}
-
-// Map sementara untuk kandidat — hindari masalah escaping onclick inline
-const _kandidatMap = new Map();
-
-function renderManualList(kandidat, roleId) {
-  const list = document.getElementById('manual-list');
-  if (!kandidat.length) {
-    list.innerHTML = '<div class="manual-item-none">Tidak ada kandidat tersedia</div>';
-    return;
-  }
-
-  // Simpan ke map dengan key = index
-  _kandidatMap.clear();
-  kandidat.forEach((k, i) => _kandidatMap.set(String(i), k));
-
-  list.innerHTML = kandidat.map((k, i) =>
-    '<div class="manual-item" data-kidx="'+i+'" data-role-id="'+esc(roleId)+'">'
-    + '<div class="manual-item-nama">'+esc(k.nama)+'</div>'
-    + '<div class="manual-item-beban">Beban bulan ini: '+esc(String(k.beban_bulan))+' penugasan</div>'
-    + '</div>'
-  ).join('');
-
-  // Event delegation di dalam list — pasang sekali tiap render
-  list.onclick = function(e) {
-    const item = e.target.closest('.manual-item');
-    if (!item) return;
-    const kidx   = item.dataset.kidx;
-    const rId    = item.dataset.roleId;
-    const pegawai = _kandidatMap.get(kidx);
-    if (!pegawai || !rId) return;
-    pilihManual(rId, pegawai);
-  };
-}
-
-function pilihManual(roleId, pegawai) {
-  if (!currentManualTarget) return;
-  const { slotIdx } = currentManualTarget;
-  const slot = formasiState[roleId];
-  if (!slot) return;
-
-  // Isi slot yang ditarget secara spesifik
-  if (slotIdx !== undefined && slotIdx >= 0 && slotIdx < slot.anggota.length) {
-    slot.anggota[slotIdx] = pegawai;
-  } else {
-    // Fallback: cari slot kosong pertama
-    const kosong = slot.anggota.findIndex(a => a === null);
-    if (kosong !== -1) {
-      slot.anggota[kosong] = pegawai;
-    } else if (slot.anggota.length < slot.jumlah_slot) {
-      slot.anggota.push(pegawai);
-    }
-  }
-
-  tutupManualDropdown();
-  renderFormasiPanel();
-}
-
-function tutupManualDropdown() {
-  document.getElementById('manual-dropdown').style.display = 'none';
-  document.getElementById('manual-dropdown-overlay').style.display = 'none';
-  currentManualTarget = null;
-}
-
-// ═══════════════════════════════════════════════════════════
 // Helpers
 // ═══════════════════════════════════════════════════════════
 
@@ -706,18 +563,18 @@ function updateValidasi() {
   const hint = document.getElementById('simpan-hint');
 
   if (totalSlot === 0) {
-    tampilStatusBar('load', '⏳ Membangun formasi...');
+    tampilStatusBar('load', 'Membangun formasi...');
     btnSimpan.disabled = true;
     hint.textContent = 'Menunggu data formasi...';
     return;
   }
 
   if (semua) {
-    tampilStatusBar('ok', '✅ Formasi Lengkap — '+terisiSlot+'/'+totalSlot+' slot terisi. Siap disimpan.');
+    tampilStatusBar('ok', 'Formasi Lengkap — '+terisiSlot+'/'+totalSlot+' slot terisi. Siap disimpan.');
     btnSimpan.disabled = false;
     hint.textContent = 'Klik simpan untuk mengaktifkan jadwal.';
   } else {
-    tampilStatusBar('err', '⚠️ '+missingRoles.join(', ') + ' — Lengkapi sebelum menyimpan.');
+    tampilStatusBar('err', missingRoles.join(', ') + ' — Lengkapi sebelum menyimpan.');
     btnSimpan.disabled = true;
     hint.textContent = (totalSlot - terisiSlot)+' slot belum terisi.';
   }

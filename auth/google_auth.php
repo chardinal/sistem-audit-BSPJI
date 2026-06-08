@@ -53,7 +53,7 @@ file_put_contents(GOOGLE_TOKEN_PATH, json_encode($client->getAccessToken(), JSON
 </head>
 <body>
   <div class="card">
-    <div class="icon">✅</div>
+    <div class="icon" style="color: #10b981; font-weight: bold; font-size: 48px;">&#10003;</div>
     <h1>Otorisasi Berhasil!</h1>
     <p>Token Google telah tersimpan di <code>config/google_token.json</code>.<br>
        Sistem siap mengirim email notifikasi dan membuat event Google Calendar.</p>

@@ -409,14 +409,14 @@ pegawai ────────────────────────
 1. Buka https://console.cloud.google.com
 2. Buat project → Enable Gmail API + Google Calendar API
 3. Buat OAuth 2.0 credentials (Web Application)
-4. Download credentials.json → letakkan di config/credentials.json
+4. Download credentials JSON → letakkan di config/google_credentials.json
 5. Akses /admin/email_debug.php → klik "Jalankan OAuth Google"
-6. Izinkan akses → token tersimpan di config/token.json
+6. Izinkan akses → token tersimpan di config/google_token.json
 ```
 
 ### 9.3 Mode Tanpa Google API
 
-Jika `config/credentials.json` tidak ada atau token kadaluarsa, sistem tetap berfungsi penuh — hanya fitur email dan kalender yang tidak aktif. Error dicatat di `NotificationService::$errors[]` dan di PHP error log.
+Jika `config/google_credentials.json` tidak ada atau token kadaluarsa, sistem tetap berfungsi penuh — hanya fitur email dan kalender yang tidak aktif. Error dicatat di `NotificationService::$errors[]` dan di PHP error log.
 
 ---
 
@@ -435,25 +435,24 @@ Jika `config/credentials.json` tidak ada atau token kadaluarsa, sistem tetap ber
 # 1. Clone repository
 git clone <repo-url> && cd Sistem_Audit_BSPJI
 
-# 2. Salin file konfigurasi (sesuaikan isi)
-cp config/config.example.php config/config.php
-
-# 3. Jalankan Docker
+# 2. Jalankan Docker (konfigurasi database otomatis dibaca dari environment variables di docker-compose.yml)
 docker-compose up -d
 
-# 4. Inisialisasi database & data demo
+# 3. Inisialisasi database & data demo
 # Buka browser: http://localhost:8080/setup.php
 ```
 
-### 10.3 Variabel Konfigurasi (`config/config.php`)
+### 10.3 Konfigurasi Database (`config/database.php`)
 
-| Key | Deskripsi |
-|-----|-----------|
-| `DB_HOST` | Host database (default: `db` untuk Docker) |
-| `DB_NAME` | Nama database (default: `ams_db`) |
-| `DB_USER` | Username database |
-| `DB_PASS` | Password database |
-| `BASE_URL` | URL dasar sistem (contoh: `http://localhost:8080`) |
+Konfigurasi database diatur secara dinamis melalui environment variables (atau default fallback jika dijalankan di Laragon/XAMPP):
+
+| Environment Variable / Key | Deskripsi | Default (XAMPP/Laragon) |
+|-----|-----------|---|
+| `DB_HOST` | Host database server | `localhost` (atau `db` di Docker) |
+| `DB_NAME` | Nama database | `ams_db` |
+| `DB_USER` | Username database | `root` |
+| `DB_PASS` | Password database | (kosong) |
+| `BASE_URL` | URL dasar sistem | `''` (kosong, atau sesuaikan path subfolder) |
 
 ### 10.4 Setup & Reset Database
 
@@ -549,7 +548,7 @@ Sistem_Audit_BSPJI/
 
 ### 12.1 Temuan Code Review
 
-#### Isu yang Sudah Diperbaiki (v8.1)
+#### Isu yang Sudah Diperbaiki (v8.2)
 
 | # | Isu | Lokasi | Status |
 |---|-----|--------|--------|
@@ -560,16 +559,17 @@ Sistem_Audit_BSPJI/
 | 5 | `catch` block pegawai menelan kode seeder perusahaan | `setup.php` baris 263 | Diperbaiki |
 | 6 | `generateId()` duplikat jika dipanggil batch sebelum INSERT | `setup.php` | Diperbaiki — interleaved generate-insert |
 | 7 | Emoji dekoratif di dashboard mengurangi kesan profesional | `admin/index.php` | Diperbaiki — diganti SVG icon |
+| 8 | Ukuran logo Kemenperin & BSPJI Surabaya di sidebar meluber | `assets/css/admin.css` | Diperbaiki — Tinggi fixed 45px, max-width 125px, tanpa animasi scale |
+| 9 | File `api/validasi_penugasan.php` tidak terpakai/deprecated | `api/validasi_penugasan.php` | Dihapus |
+| 10| Fungsi `badgeValidasi()` dan `uuid()` deprecated | `includes/functions.php` | Dihapus |
 
 #### Potensi Risiko yang Perlu Diperhatikan
 
 | # | Isu | Lokasi | Rekomendasi |
 |---|-----|--------|-------------|
 | 1 | `generateId()` tidak atomic — race condition pada concurrent INSERT | `includes/functions.php` | Pertimbangkan `SELECT ... FOR UPDATE` atau auto-increment |
-| 2 | `badgeValidasi()` mereferensikan status yang sudah dihapus (`Menunggu`, `Accepted`, `Reschedule`) | `includes/functions.php` | Hapus atau update ke status yang berlaku |
-| 3 | `uuid()` masih ada di `functions.php` (deprecated) | `includes/functions.php` | Hapus setelah migrasi selesai dikonfirmasi |
-| 4 | `$db` global di `requireAdmin()` tidak selalu tersedia | `includes/auth.php` | Pertimbangkan passing `$db` sebagai parameter |
-| 5 | Tidak ada rate limiting di endpoint API | `api/*.php` | Tambahkan validasi CSRF token |
+| 2 | `$db` global di `requireAdmin()` tidak selalu tersedia | `includes/auth.php` | Pertimbangkan passing `$db` sebagai parameter |
+| 3 | Tidak ada rate limiting di endpoint API | `api/*.php` | Tambahkan validasi CSRF token |
 
 ### 12.2 Integritas Relasi Tabel
 
@@ -605,4 +605,4 @@ Contoh: `K00001`, `P00023`, `N00100`
 
 ---
 
-*Dokumen ini diperbarui otomatis — terakhir direvisi 7 Juni 2026 (v8.1)*
+*Dokumen ini diperbarui otomatis — terakhir direvisi 9 Juni 2026 (v8.2)*

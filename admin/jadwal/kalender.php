@@ -8,8 +8,9 @@ $db = getDB();
 
 // Ambil semua kunjungan untuk kalender
 $kunjungans = $db->query("
-    SELECT k.id, k.tanggal_mulai, k.tanggal_selesai, k.status, k.nama_perusahaan AS perusahaan
+    SELECT k.id, k.tanggal_mulai, k.tanggal_selesai, k.status, pr.nama AS perusahaan
     FROM kunjungan k
+    JOIN perusahaan pr ON pr.id = k.perusahaan_id
     ORDER BY k.tanggal_mulai ASC
 ")->fetchAll();
 
@@ -27,7 +28,7 @@ include '../_header.php';
 ?>
 
 <div class="page-header">
-  <div><h1>🗓️ Kalender Visual Kunjungan</h1></div>
+  <div><h1>Kalender Visual Kunjungan</h1></div>
   <a href="create.php" class="btn btn-primary">+ Buat Kunjungan Baru</a>
 </div>
 

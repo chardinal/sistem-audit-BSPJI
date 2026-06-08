@@ -74,7 +74,7 @@ if (isPost()) {
 
     <?php if ($warning): ?>
     <div style="background:#FEF9C3; border:1px solid #FDE047; color:#854D0E; padding:12px 14px; border-radius:10px; font-size:13px; margin-bottom:16px; text-align:center; font-weight:500;">
-      ⚠️ <?= e($warning) ?>
+      <?= e($warning) ?>
     </div>
     <?php endif; ?>
 
@@ -95,7 +95,7 @@ if (isPost()) {
             <rect x="2" y="4" width="20" height="16" rx="3"/>
             <polyline points="2,4 12,13 22,4"/>
           </svg>
-          <input type="email" id="email" name="email" placeholder="admin@gmail.com" value="<?= e(post('email')) ?>" required autofocus autocomplete="email"/>
+          <input type="email" id="email" name="email" placeholder="Masukan Email" value="<?= e(post('email')) ?>" required autofocus autocomplete="email"/>
         </div>
       </div>
 

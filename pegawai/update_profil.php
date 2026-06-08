@@ -9,7 +9,7 @@ $db  = getDB();
 $pgw = currentPegawai();
 
 if (!isPost()) {
-    header('Location: profil.php');
+    header('Location: index.php?tab=profil');
     exit;
 }
 
@@ -73,7 +73,7 @@ if (!empty($_FILES['foto']['name'])) {
 
 // ── 3. Jika ada error, kembali dengan pesan ─────────────────
 if ($errors) {
-    redirectWith(BASE_URL . '/pegawai/profil.php', 'error', implode(' ', $errors));
+    redirectWith(BASE_URL . '/pegawai/index.php?tab=profil', 'error', implode(' ', $errors));
 }
 
 // ── 4. Update database ───────────────────────────────────────
@@ -94,5 +94,5 @@ if ($freshData) {
     $_SESSION['pegawai_nama'] = $freshData['nama'];
 }
 
-redirectWith(BASE_URL . '/pegawai/profil.php', 'success', 'Profil berhasil diperbarui.');
+redirectWith(BASE_URL . '/pegawai/index.php?tab=profil', 'success', 'Profil berhasil diperbarui.');
 

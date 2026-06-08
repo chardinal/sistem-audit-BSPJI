@@ -94,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['test_email']) && $can
             $body = '
 <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:24px;background:#f8fafc">
   <div style="background:#0f172a;border-radius:12px;padding:24px;text-align:center;margin-bottom:20px">
-    <h1 style="color:#fff;margin:0;font-size:20px">✅ Test Email Berhasil!</h1>
+    <h1 style="color:#fff;margin:0;font-size:20px">Test Email Berhasil!</h1>
   </div>
   <div style="background:#fff;border-radius:8px;padding:20px;border:1px solid #e2e8f0">
     <p style="margin:0 0 12px;color:#334155">Email ini dikirim dari <strong>AMS BSPJI</strong> sebagai konfirmasi bahwa konfigurasi Gmail API sudah benar.</p>
@@ -116,20 +116,20 @@ include '_header.php';
 
 <div class="page-header">
   <div>
-    <h1>🔧 Diagnosa Email & Google API</h1>
+    <h1>Diagnosa Email & Google API</h1>
     <div class="breadcrumb"><a href="index.php">Dashboard</a> / Diagnosa Email</div>
   </div>
 </div>
 
 <!-- Status Checklist -->
 <div class="card" style="margin-bottom:20px">
-  <div class="card-header"><h2>📋 Status Komponen</h2></div>
+  <div class="card-header"><h2>Status Komponen</h2></div>
   <div class="card-body" style="padding:0">
     <?php foreach ($checks as [$type, $msg]): ?>
     <?php
       $bg  = ['ok'=>'#F0FDF4','fail'=>'#FEF2F2','warn'=>'#FFFBEB','info'=>'#EFF6FF'][$type] ?? '#fff';
       $clr = ['ok'=>'#15803D','fail'=>'#DC2626','warn'=>'#D97706','info'=>'#2563EB'][$type] ?? '#374151';
-      $icon = ['ok'=>'✅','fail'=>'❌','warn'=>'⚠️','info'=>'ℹ️'][$type] ?? '•';
+      $icon = ['ok'=>'✓','fail'=>'✗','warn'=>'!','info'=>'i'][$type] ?? '•';
     ?>
     <div style="padding:12px 20px;border-bottom:1px solid #F1F5F9;background:<?= $bg ?>;display:flex;gap:10px;align-items:flex-start">
       <span style="font-size:16px;flex-shrink:0"><?= $icon ?></span>
@@ -167,7 +167,7 @@ include '_header.php';
   <div class="card-body">
     <?php if ($testResult): ?>
     <div class="alert alert-<?= $testResult[0]==='ok'?'success':'error' ?>" style="margin-bottom:16px">
-      <?= $testResult[0]==='ok'?'✅':'❌' ?> <?= htmlspecialchars($testResult[1]) ?>
+      <?= $testResult[0]==='ok'?'✓':'✗' ?> <?= htmlspecialchars($testResult[1]) ?>
     </div>
     <?php endif; ?>
     <form method="POST">
@@ -236,7 +236,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['test_notif_penugasan'
                 if (!empty($notif->errors)) {
                     $notifResult = ['warn', 'Sebagian gagal: ' . implode('; ', $notif->errors)];
                 } else {
-                    $notifResult = ['ok', '✅ Notifikasi penugasan berhasil dikirim ke semua anggota tim!'];
+                    $notifResult = ['ok', 'Notifikasi penugasan berhasil dikirim ke semua anggota tim!'];
                 }
             } else {
                 $notifResult = ['fail', 'NotificationService tidak siap: ' . implode('; ', $notif->errors)];
@@ -250,7 +250,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['test_notif_penugasan'
 
 <div class="card" style="margin-top:20px;border:2px solid #BFDBFE">
   <div class="card-header" style="background:#EFF6FF">
-    <h2 style="color:#1D4ED8">📨 Test Trigger Notifikasi Penugasan</h2>
+    <h2 style="color:#1D4ED8">Test Trigger Notifikasi Penugasan</h2>
   </div>
   <div class="card-body">
     <p style="font-size:13.5px;color:#374151;margin-bottom:16px">
@@ -271,7 +271,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['test_notif_penugasan'
 
     <?php if (empty($kunjungansTest)): ?>
     <div style="padding:16px;background:#FEF9C3;border-radius:8px;font-size:13px;color:#92400E">
-      ⚠️ Belum ada data kunjungan. Jalankan <a href="<?= BASE_URL ?>/setup.php"><code>setup.php</code></a> untuk membuat data demo terlebih dahulu.
+      Belum ada data kunjungan. Jalankan <a href="<?= BASE_URL ?>/setup.php"><code>setup.php</code></a> untuk membuat data demo terlebih dahulu.
     </div>
     <?php else: ?>
     <form method="POST" style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap">
