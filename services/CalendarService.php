@@ -30,6 +30,7 @@ class CalendarService
     public function createEvent(
         string $pegawaiEmail,
         string $namaPerusahaan,
+        string $alamatPerusahaan,
         string $jenisAudit,
         string $rolePegawai,
         string $tanggalMulai,
@@ -45,11 +46,12 @@ class CalendarService
         $endDate = date('Y-m-d', strtotime($tanggalSelesai . ' +1 day'));
 
         $event = new Google\Service\Calendar\Event([
-            'summary'     => "Audit: {$namaPerusahaan}",
-            'description' => "Jenis Audit : {$jenisAudit}\nRole Anda   : {$rolePegawai}\n\nTim Audit:\n{$timList}",
+            'summary'     => "Audit {$jenisAudit} - {$namaPerusahaan}",
+            'description' => "Jenis Audit : {$jenisAudit}\nRole Anda   : {$rolePegawai}\nLokasi      : {$alamatPerusahaan}\n\nTim Audit:\n{$timList}",
             'start'       => ['date' => $tanggalMulai],
             'end'         => ['date' => $endDate],
             'attendees'   => [['email' => $pegawaiEmail]],
+            'location'    => $alamatPerusahaan,
             'reminders'   => [
                 'useDefault' => false,
                 'overrides'  => [

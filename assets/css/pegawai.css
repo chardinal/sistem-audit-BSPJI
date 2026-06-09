@@ -392,6 +392,16 @@ a:hover { text-decoration: underline; }
 }
 
 /* ── Riwayat List ─────────────────────────────────────────── */
+.riwayat-card {
+  background: var(--white);
+}
+@media (min-width: 768px) {
+  .riwayat-card {
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+}
 .riwayat-item {
   padding: 16px 20px;
   border-bottom: 1px solid var(--border);

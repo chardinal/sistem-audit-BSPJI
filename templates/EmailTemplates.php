@@ -18,10 +18,17 @@ class EmailTemplates
         string $jenisAudit,
         string $tanggalMulai,
         string $tanggalSelesai,
-        array  $anggotaTim = []
+        array  $anggotaTim = [],
+        string $declineUrl = ''
     ): array {
         $subject = "[AMS] Penugasan Audit Baru - {$namaPerusahaan}";
         $timHtml = self::buildTimHtml($anggotaTim);
+
+        $declineBtn = $declineUrl ? "
+            <div style='margin:28px 0 10px;text-align:center'>
+                <a href='{$declineUrl}' class='btn-decline' style='display:inline-block;background:#ef4444;color:#fff;text-decoration:none;padding:12px 24px;font-size:14px;font-weight:700;border-radius:8px;box-shadow:0 2px 4px rgba(239,68,68,0.2)'>Saya Tidak Bersedia</a>
+            </div>
+        " : "";
 
         $body = self::wrapper("
             <div class='header-badge'>PENUGASAN BARU</div>
@@ -61,6 +68,8 @@ class EmailTemplates
             <div class='note'>
                 Event Google Calendar telah ditambahkan otomatis ke kalender Anda.
             </div>
+
+            {$declineBtn}
         ", '#1a6b3c');
 
         return ['subject' => $subject, 'body' => $body];
@@ -304,7 +313,8 @@ class EmailTemplates
 <meta charset='UTF-8'>
 <meta name='viewport' content='width=device-width,initial-scale=1'>
 <style>
-  body        { margin:0; padding:0; background:#f4f4f5; font-family:'Segoe UI',Arial,sans-serif; color:#1a1a2e; }
+  body, table, td, th, p, a, span, div { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+  body        { margin:0; padding:0; background:#f4f4f5; color:#1a1a2e; }
   .wrapper    { max-width:560px; margin:32px auto; background:#ffffff; border-radius:12px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,.08); }
   .top-bar    { background:{$accentColor}; height:6px; }
   .body-content { padding:32px 36px; }
@@ -326,6 +336,16 @@ class EmailTemplates
   .tim-table tbody tr:last-child td { border-bottom:none; }
   .note   { background:#f0fdf4; border-left:3px solid #16a34a; border-radius:4px; padding:10px 14px; font-size:12px; color:#166534; margin-top:20px; }
   .footer { background:#f9fafb; padding:16px 36px; font-size:11px; color:#9ca3af; text-align:center; border-top:1px solid #e5e7eb; }
+  
+  @media only screen and (max-width: 600px) {
+    body { background:#ffffff !important; }
+    .wrapper { max-width:100% !important; margin:0 !important; border-radius:0 !important; box-shadow:none !important; }
+    .body-content { padding:24px 20px !important; }
+    .info-row { display:block !important; padding:10px 0 !important; }
+    .label { display:block !important; width:100% !important; padding-right:0 !important; margin-bottom:4px !important; }
+    .value { display:block !important; }
+    .footer { padding:24px 20px !important; }
+  }
 </style>
 </head>
 <body>

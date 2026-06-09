@@ -37,7 +37,7 @@ $db = getDB();
 
 // ── Ambil detail penugasan lama ──────────────────────────────────────────
 $sPen = $db->prepare("
-    SELECT pt.id, pt.kunjungan_id, pt.pegawai_id, pt.role_id,
+    SELECT pt.id, pt.kunjungan_id, pt.pegawai_id, pt.role_id, pt.calendar_event_id,
            k.tanggal_mulai, k.tanggal_selesai, k.perusahaan_id, k.jenis_audit_id,
            pg.nama AS pegawai_lama_nama
     FROM penugasan_tim pt
@@ -82,16 +82,16 @@ if ($action === 'otomatis') {
 
     $pengganti = $kandidat[0];
 
-    // Ganti penugasan
-    $db->prepare("UPDATE penugasan_tim SET pegawai_id=?, ditugaskan_pada=NOW() WHERE id=?")
+    // Ganti penugasan dan reset calendar_event_id agar di-sync saat simpan perubahan
+    $db->prepare("UPDATE penugasan_tim SET pegawai_id=?, calendar_event_id=NULL, ditugaskan_pada=NOW() WHERE id=?")
        ->execute([$pengganti['id'], $penugasanId]);
 
     // Kembalikan status kunjungan ke 'Aktif' jika sebelumnya 'Butuh Intervensi'
     $db->prepare("UPDATE kunjungan SET status='Aktif' WHERE id=? AND status='Butuh Intervensi'")
        ->execute([$kunjunganId]);
 
-    // Notifikasi
-    _kirimNotifGanti($db, $kunjunganId, $oldPegawaiId, $pengganti['id']);
+    // Notifikasi (cancellation untuk pegawai lama)
+    _kirimNotifGanti($db, $kunjunganId, $oldPegawaiId, $pengganti['id'], $pen['calendar_event_id']);
 
     echo json_encode([
         'success'  => true,
@@ -124,16 +124,16 @@ if ($action === 'manual') {
         echo json_encode(['success' => false, 'message' => 'Pegawai tidak ditemukan atau tidak aktif.']); exit;
     }
 
-    // Ganti penugasan
-    $db->prepare("UPDATE penugasan_tim SET pegawai_id=?, ditugaskan_pada=NOW() WHERE id=?")
+    // Ganti penugasan dan reset calendar_event_id agar di-sync saat simpan perubahan
+    $db->prepare("UPDATE penugasan_tim SET pegawai_id=?, calendar_event_id=NULL, ditugaskan_pada=NOW() WHERE id=?")
        ->execute([$pegawaiBaru, $penugasanId]);
 
     // Kembalikan status kunjungan ke 'Aktif' jika sebelumnya 'Butuh Intervensi'
     $db->prepare("UPDATE kunjungan SET status='Aktif' WHERE id=? AND status='Butuh Intervensi'")
        ->execute([$kunjunganId]);
 
-    // Notifikasi
-    _kirimNotifGanti($db, $kunjunganId, $oldPegawaiId, $pegawaiBaru);
+    // Notifikasi (cancellation untuk pegawai lama)
+    _kirimNotifGanti($db, $kunjunganId, $oldPegawaiId, $pegawaiBaru, $pen['calendar_event_id']);
 
     echo json_encode([
         'success' => true,
@@ -163,12 +163,12 @@ if ($action === 'kandidat') {
 echo json_encode(['success' => false, 'message' => 'Action tidak dikenal.']);
 
 // ── Helper: kirim notifikasi ganti anggota ───────────────────────────────
-function _kirimNotifGanti(PDO $db, string $kunjunganId, string $oldId, string $newId): void
+function _kirimNotifGanti(PDO $db, string $kunjunganId, string $oldId, string $newId, ?string $oldCalEventId): void
 {
     try {
         $notif = new NotificationService($db);
         if ($notif->isReady()) {
-            $notif->kirimGantiAnggota($kunjunganId, $oldId, $newId);
+            $notif->kirimGantiAnggota($kunjunganId, $oldId, $newId, $oldCalEventId);
         }
     } catch (Throwable $e) {
         error_log('[ganti_anggota] Notif error: '.$e->getMessage());

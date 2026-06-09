@@ -28,7 +28,7 @@ $tab = $_GET['tab'] ?? 'jadwal';
   <div class="pgw-header-brand">
     <img src="<?= $B ?>/assets/logo_bspji.png" alt="Logo BSPJI" class="pgw-header-logo-img">
     <div class="pgw-header-brand-title">
-      <span class="pgw-header-app-name">AMS</span>
+      <span class="pgw-header-app-name">Sistem Manajemen Audit</span>
       <span class="pgw-header-portal-label">Portal Pegawai</span>
     </div>
   </div>

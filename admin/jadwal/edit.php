@@ -17,9 +17,11 @@ if (!$id) { header('Location: index.php'); exit; }
 if (isPost() && isset($_POST['action']) && $_POST['action'] === 'hapus_anggota') {
     $penId = post('penugasan_id');
     if ($penId) {
-        $sOld = $db->prepare("SELECT pegawai_id FROM penugasan_tim WHERE id=?");
+        $sOld = $db->prepare("SELECT pegawai_id, calendar_event_id FROM penugasan_tim WHERE id=?");
         $sOld->execute([$penId]);
-        $oldPegawaiId = $sOld->fetchColumn();
+        $oldRow = $sOld->fetch();
+        $oldPegawaiId = $oldRow['pegawai_id'] ?? null;
+        $oldCalEventId = $oldRow['calendar_event_id'] ?? null;
 
         $result = autoReplacement($db, $penId);
 
@@ -36,12 +38,19 @@ if (isPost() && isset($_POST['action']) && $_POST['action'] === 'hapus_anggota')
             if ($oldPegawaiId && $newPegawaiId) {
                 $notif = new NotificationService($db);
                 if ($notif->isReady()) {
-                    $notif->kirimGantiAnggota($id, $oldPegawaiId, $newPegawaiId);
+                    $notif->kirimGantiAnggota($id, $oldPegawaiId, $newPegawaiId, $oldCalEventId);
                     foreach ($notif->errors as $errMsg) error_log('[AMS Email] ' . $errMsg);
                 }
             }
             redirectWith(BASE_URL . '/admin/jadwal/edit.php?id='.$id, 'success', 'Anggota dihapus. Pengganti otomatis berhasil ditemukan dan dinotifikasi.');
         } else {
+            if ($oldPegawaiId) {
+                $notif = new NotificationService($db);
+                if ($notif->isReady()) {
+                    $notif->kirimHapusAnggotaTanpaPengganti($id, $oldPegawaiId, $oldCalEventId);
+                    foreach ($notif->errors as $errMsg) error_log('[AMS Email] ' . $errMsg);
+                }
+            }
             redirectWith(BASE_URL . '/admin/jadwal/edit.php?id='.$id, 'warning', 'Anggota dihapus. Tidak ada kandidat pengganti — jadwal ditandai Butuh Intervensi.');
         }
     }

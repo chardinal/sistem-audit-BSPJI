@@ -2,6 +2,7 @@
 require_once '../config/database.php';
 require_once '../includes/auth.php';
 require_once '../includes/functions.php';
+require_once '../includes/notifikasi.php';
 
 requirePegawai();
 $db  = getDB();
@@ -325,7 +326,7 @@ $jadwalBulanIni = array_filter($jadwalsKalender, fn($j) => substr($j['tanggal_mu
   </select>
 </div>
 
-<div class="card" style="border:none;background:transparent;box-shadow:none">
+<div class="card riwayat-card">
   <div class="card-body riwayat-container" style="padding:0">
     <?php if (empty($riwayats)): ?>
     <div class="empty-state" style="padding:36px">

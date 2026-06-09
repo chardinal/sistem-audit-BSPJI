@@ -275,7 +275,7 @@ function autoReplacement(PDO $db, string $penugasanId): string
 {
     require_once __DIR__ . '/notifikasi.php';
 
-    // Ambil detail penugasan yang dihapus — termasuk jenis_audit_id kunjungan
+    // Ambil detail penugasan yang dihapus - termasuk jenis_audit_id kunjungan
     $s = $db->prepare("
         SELECT pt.id, pt.kunjungan_id, pt.pegawai_id, pt.role_id,
                k.tanggal_mulai, k.tanggal_selesai, k.perusahaan_id, k.jenis_audit_id
